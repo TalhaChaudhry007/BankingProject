@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Banking System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --surface2: #f7f8fa;
+            --surface3: #eef0f3;
+            --border: #dde1e7;
+            --border-strong: #c5cad4;
+            --text: #0f1923;
+            --text-sub: #4a5568;
+            --text-muted: #8a94a6;
+            --text-dim: #b8c0cc;
+            --primary: #1a3c6e;
+            --primary-hover: #163260;
+            --primary-light: #e8eef7;
+            --green: #0d7a4e;
+            --green-bg: #e8f5ef;
+            --red: #b91c1c;
+            --red-bg: #fef2f2;
+            --amber: #92400e;
+            --amber-bg: #fffbeb;
+            --blue: #1e40af;
+            --blue-bg: #eff6ff;
+            --bronze: #92400e;
+            --bronze-bg: #fef3c7;
+            --gold: #78350f;
+            --gold-bg: #fef3c7;
+            --biz: #1e3a5f;
+            --biz-bg: #dbeafe;
+            --radius: 6px;
+            --radius-sm: 4px;
+            --radius-lg: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── HEADER ── */
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--primary);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .logo-mark svg {
+                width: 18px;
+                height: 18px;
+                fill: #fff;
+            }
+
+        .logo-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+            .logo-text span {
+                color: rgba(255,255,255,.55);
+                font-weight: 400;
+                font-size: 13px;
+                margin-left: 8px;
+            }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .session-pill {
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            color: rgba(255,255,255,.85);
+            display: none;
+        }
+
+            .session-pill.active {
+                display: block;
+            }
+
+        .btn-logout {
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.2);
+            color: rgba(255,255,255,.85);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background .15s;
+            display: none;
+        }
+
+            .btn-logout:hover {
+                background: rgba(255,255,255,.2);
+            }
+
+        /* ── MAIN LAYOUT ── */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 36px 16px 48px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 560px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 22px 28px 18px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .card-eyebrow {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.4px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-top: 3px;
+        }
+
+        .card-body {
+            padding: 28px;
+        }
+
+        /* ── FORM ── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            letter-spacing: 0.1px;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            padding: 10px 13px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+            input:focus, select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(26,60,110,.1);
+            }
+
+            input::placeholder {
+                color: var(--text-dim);
+            }
+
+            select option {
+                background: #fff;
+            }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all .15s;
+            letter-spacing: 0.1px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-hover);
+                border-color: var(--primary-hover);
+            }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-sub);
+            border-color: var(--border);
+        }
+
+            .btn-secondary:hover {
+                background: var(--surface2);
+                border-color: var(--border-strong);
+                color: var(--text);
+            }
+
+        .btn-danger {
+            background: var(--surface);
+            color: var(--red);
+            border-color: #fca5a5;
+        }
+
+            .btn-danger:hover {
+                background: var(--red-bg);
+            }
+
+        .btn-success {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+
+            .btn-success:hover {
+                opacity: .88;
+            }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ── NAV MENU ── */
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: var(--radius);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all .12s;
+            background: var(--surface);
+        }
+
+            .nav-item:hover {
+                background: var(--primary-light);
+                border-color: #c7d7ef;
+            }
+
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+            .nav-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+        .nav-text .nav-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .nav-text .nav-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .nav-arrow {
+            margin-left: auto;
+            color: var(--text-dim);
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* ── ALERTS ── */
+        .alert {
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            margin-bottom: 18px;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            line-height: 1.45;
+        }
+
+        .alert-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .alert-error {
+            background: var(--red-bg);
+            border-color: #fca5a5;
+            color: var(--red);
+        }
+
+            .alert-error .alert-dot {
+                background: var(--red);
+            }
+
+        .alert-success {
+            background: var(--green-bg);
+            border-color: #6ee7b7;
+            color: var(--green);
+        }
+
+            .alert-success .alert-dot {
+                background: var(--green);
+            }
+
+        .alert-warning {
+            background: var(--amber-bg);
+            border-color: #fcd34d;
+            color: var(--amber);
+        }
+
+            .alert-warning .alert-dot {
+                background: #d97706;
+            }
+
+        .alert-info {
+            background: var(--blue-bg);
+            border-color: #93c5fd;
+            color: var(--blue);
+        }
+
+            .alert-info .alert-dot {
+                background: var(--blue);
+            }
+
+        /* ── BADGES ── */
+        .badge {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-bronze {
+            background: var(--bronze-bg);
+            color: var(--bronze);
+        }
+
+        .badge-gold {
+            background: #fef9c3;
+            color: #713f12;
+        }
+
+        .badge-business {
+            background: var(--biz-bg);
+            color: var(--biz);
+        }
+
+        .badge-frozen {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-suspicious {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* ── BALANCE CARD ── */
+        .balance-block {
+            background: var(--primary);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            margin-bottom: 22px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .balance-block .bal-label {
+                font-size: 11px;
+                font-weight: 500;
+                color: rgba(255,255,255,.6);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 6px;
+            }
+
+            .balance-block .bal-amount {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 26px;
+                font-weight: 500;
+                letter-spacing: -1px;
+            }
+
+            .balance-block .bal-currency {
+                font-size: 13px;
+                font-weight: 400;
+                color: rgba(255,255,255,.6);
+                margin-left: 4px;
+            }
+
+            .balance-block .bal-meta {
+                font-size: 11px;
+                color: rgba(255,255,255,.5);
+                margin-top: 4px;
+            }
+
+        /* ── TIER INFO ── */
+        .tier-table {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tier-table-head {
+            padding: 9px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface3);
+        }
+
+        .tier-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 14px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .tier-row:last-child {
+                border-bottom: none;
+            }
+
+            .tier-row .t-limit {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                color: var(--text-muted);
+            }
+
+        /* ── DATA TABLE ── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+            .data-table th {
+                text-align: left;
+                padding: 9px 12px;
+                border-bottom: 2px solid var(--border);
+                color: var(--text-sub);
+                font-weight: 600;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+                background: var(--surface2);
+            }
+
+            .data-table td {
+                padding: 11px 12px;
+                border-bottom: 1px solid var(--border);
+                color: var(--text);
+                vertical-align: middle;
+            }
+
+            .data-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .data-table tbody tr:hover td {
+                background: var(--surface2);
+            }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+
+        /* ── SECTION LABEL ── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+        }
+
+        /* ── STEP HINT ── */
+        .hint-box {
+            background: var(--blue-bg);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius-sm);
+            padding: 10px 13px;
+            font-size: 12px;
+            color: var(--blue);
+            margin-bottom: 18px;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 36px 20px;
+        }
+
+            .empty-state .es-icon {
+                width: 48px;
+                height: 48px;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 12px;
+            }
+
+                .empty-state .es-icon svg {
+                    width: 22px;
+                    height: 22px;
+                    stroke: var(--text-muted);
+                    fill: none;
+                }
+
+            .empty-state .es-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text);
+                margin-bottom: 4px;
+            }
+
+            .empty-state .es-text {
+                font-size: 13px;
+                color: var(--text-muted);
+            }
+
+        /* ── TX TYPE COLORS ── */
+        .tx-credit {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .tx-debit {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* ── PIN MODAL ── */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.4);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+            .overlay.open {
+                display: flex;
+            }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 400px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 2px 6px;
+            line-height: 1;
+            border-radius: var(--radius-sm);
+        }
+
+            .modal-close:hover {
+                background: var(--surface2);
+                color: var(--text);
+            }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        /* PIN PAD */
+        .pin-dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 14px 0 8px;
+        }
+
+        .pin-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--surface3);
+            border: 2px solid var(--border-strong);
+            transition: all .15s;
+        }
+
+            .pin-dot.filled {
+                background: var(--primary);
+                border-color: var(--primary);
+            }
+
+        .pin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 230px;
+            margin: 12px auto 0;
+        }
+
+        .pin-key {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 0;
+            font-size: 17px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text);
+            transition: all .1s;
+        }
+
+            .pin-key:hover {
+                background: var(--primary-light);
+                border-color: #c7d7ef;
+            }
+
+            .pin-key:active {
+                transform: scale(.96);
+            }
+
+            .pin-key.key-del {
+                font-size: 13px;
+                color: var(--text-sub);
+                font-family: inherit;
+            }
+
+            .pin-key.key-empty {
+                visibility: hidden;
+            }
+
+        .attempts-text {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--surface);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+        <header>
+            <div class="logo-mark">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="#fff" stroke-width="1.5" /></svg>
+            </div>
+            <div class="logo-text">National Banking System <span>Management Portal</span></div>
+            <div class="header-right">
+                <div class="session-pill" id="sessionBadge"></div>
+                <button class="btn-logout" id="logoutBtn" onclick="logout()">Sign Out</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="card" id="mainCard">
+                <div class="card-header" id="cardHeader">
+                    <div class="card-eyebrow" id="cardEyebrow">Welcome</div>
+                    <div class="card-title" id="cardTitle">Banking Management System</div>
+                    <div class="card-subtitle" id="cardSubtitle">Select your account type to continue</div>
+                </div>
+                <div class="card-body" id="cardBody"></div>
+            </div>
+        </main>
+
+        <footer>
+            <span>National Banking System &mdash; OOP Assignment 3</span>
+            <span>All data stored locally in your browser</span>
+        </footer>
+    </div>
+
+    <!-- PIN Overlay -->
+    <div class="overlay" id="pinOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Card PIN Verification</div>
+                <button class="modal-close" onclick="closePinModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="pinModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Confirm Overlay -->
+    <div class="overlay" id="confirmOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="confirmTitle">Confirm</div>
+                <button class="modal-close" onclick="closeConfirm()">&times;</button>
+            </div>
+            <div class="modal-body" id="confirmBody"></div>
+        </div>
+    </div>
+
+    <script>
+
+        // icon helper
+
+        const IC = {
+        user:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`,
+        building: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 21V9h6v12M9 13h6"/></svg>`,
+        shield:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l7 4v5c0 5-3.5 9.5-7 11-3.5-1.5-7-6-7-11V6l7-4z"/></svg>`,
+        plus:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>`,
+        login:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>`,
+        deposit:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg>`,
+        withdraw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`,
+        transfer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>`,
+        history:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>`,
+        loan:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+        list:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+        bell:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+        freeze:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5l-5 5-5-5"/><path d="M17 19l-5-5-5 5"/><path d="M2 12h20"/><path d="M5 7l5 5-5 5"/><path d="M19 7l-5 5 5 5"/></svg>`,
+        fire:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 3z"/></svg>`,
+        trash:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`,
+        chart:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+        warn:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        empty:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>`,
+        card:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>`,
+        check:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>`,
+        };
+
+        function icon(name, color) {
+        const s = IC[name] || IC.empty;
+        return `<span style="display:inline-flex;align-items:center;${color?`color:${color}`:''}; width:16px;height:16px;">${s}</span>`;
+        }
+
+
+        // local "database" (backed by localStorage-style objects)
+
+        const DB = {
+        KEYS: {
+        users:'bs_users', pending_users:'bs_pending_users',
+        companies:'bs_companies', pending_companies:'bs_pending_companies',
+        employees:'bs_companies_employees', admin:'bs_admin',
+        cards:'bs_cards', transactions:'bs_transactions',
+        loans:'bs_loan', freeze_acc:'bs_freeze_acc',
+        freeze_cards:'bs_freeze_cards', suspicious:'bs_suspicious_acc',
+        },
+        get(k) { try { return JSON.parse(localStorage.getItem(this.KEYS[k]) || '[]'); } catch { return []; } },
+        set(k, d) { localStorage.setItem(this.KEYS[k], JSON.stringify(d)); },
+        init() {
+        if (localStorage.getItem('bs_initialized')) return;
+        this.set('users', [
+        {id:'101',name:'Ali Khan',address:'Lahore',cnic:'3520112345678',username:'ali',password:'pass1',balance:50000,category:'Bronze'},
+        {id:'102',name:'Sara Ahmed',address:'Karachi',cnic:'4210198765432',username:'sara',password:'pass2',balance:1500000,category:'Gold'},
+        {id:'103',name:'Bilal Khan',address:'Islamabad',cnic:'6110112345678',username:'bilal',password:'pass3',balance:5000,category:'Bronze'},
+        {id:'104',name:'Zain Malik',address:'Quetta',cnic:'5440012345678',username:'zain',password:'pass4',balance:10000,category:'Bronze'},
+        ]);
+        this.set('pending_users', [
+        {id:'105',name:'John Doe',address:'Peshawar',cnic:'1234567890123',username:'john',password:'newpass',balance:0,category:'Bronze'},
+        {id:'106',name:'Emily Rose',address:'Multan',cnic:'9876543210123',username:'emily',password:'pass00',balance:0,category:'Gold'},
+        ]);
+        this.set('companies', [
+        {id:'201',name:'Tech Solutions',address:'Islamabad',taxNumber:'12345',username:'tech',password:'pass99',balance:50000000,category:'Business'},
+        {id:'202',name:'Alpha Traders',address:'Lahore',taxNumber:'67890',username:'alpha',password:'pass88',balance:200000,category:'Gold'},
+        {id:'385',name:'TechSol',address:'Karachi',taxNumber:'99887',username:'techsol',password:'tech',balance:0,category:'Bronze'},
+        ]);
+        this.set('pending_companies', []);
+        this.set('employees', []);
+        this.set('admin', [{username:'admin',password:'123'},{username:'manager',password:'admin1'}]);
+        this.set('cards', [
+        {userId:'101',cardNumber:'1234567890123456',pin:'1122'},
+        {userId:'102',cardNumber:'8765432109876543',pin:'9999'},
+        {userId:'201',cardNumber:'1111222233334444',pin:'5555'},
+        {userId:'104',cardNumber:'5555666677778888',pin:'1234'},
+        {userId:'385',cardNumber:'4649902598609005',pin:'1213'},
+        ]);
+        this.set('transactions', [
+        {date:'1-12-2025',id:'101',amount:10000,type:'Deposit',targetId:''},
+        {date:'1-12-2025',id:'101',amount:2000,type:'Withdraw',targetId:''},
+        {date:'2-12-2025',id:'201',amount:500000,type:'Deposit',targetId:''},
+        {date:'2-12-2025',id:'101',amount:5000,type:'Transfer',targetId:'104'},
+        {date:'3-12-2025',id:'201',amount:100000,type:'Transfer',targetId:'101'},
+        {date:'3-12-2025',id:'102',amount:500,type:'Withdraw',targetId:''},
+        {date:'3-12-2025',id:'102',amount:1000,type:'Transfer',targetId:'101'},
+        ]);
+        this.set('loans', []);
+        this.set('freeze_acc', []);
+        this.set('freeze_cards', []);
+        this.set('suspicious', []);
+        localStorage.setItem('bs_initialized','1');
+        }
+        };
+
+
+        // small utility functions
+
+        function getCurrentDate() {
+        const d = new Date();
+        return `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
+        }
+        function genId() {
+        let id;
+        do { id = String(Math.floor(Math.random()*900)+100); } while (!isIdUnique(id));
+        return id;
+        }
+        function genCard() { return Array.from({length:16},()=>Math.floor(Math.random()*10)).join(''); }
+        function isIdUnique(id) {
+        return ![...DB.get('users'),...DB.get('pending_users'),...DB.get('companies'),...DB.get('pending_companies')].find(r=>r.id===id);
+        }
+        function isUsernameTaken(u) {
+        return !![...DB.get('users'),...DB.get('pending_users'),...DB.get('companies'),...DB.get('pending_companies')].find(r=>r.username===u.trim());
+        }
+        function isAccountFrozen(id) { return !!DB.get('freeze_acc').find(r=>r.id===id); }
+        function isCardFrozen(cn) { return !!DB.get('freeze_cards').find(r=>r.cardNumber===cn); }
+        function isAccountSuspicious(id) { return !!DB.get('suspicious').find(r=>r.id===id); }
+        function getBalanceLimit(cat) { return cat==='Business'?100000000000:cat==='Gold'?1000000000:100000000; }
+        function getDailyLimit(cat) { return cat==='Business'?20000000:cat==='Gold'?500000:100000; }
+        function logTx(id, amount, type, targetId='') {
+        const txs = DB.get('transactions');
+        txs.push({date:getCurrentDate(),id,amount,type,targetId});
+        DB.set('transactions',txs);
+        }
+        function modifyBalance(key, targetId, amount, isDeposit) {
+        const recs = DB.get(key);
+        const idx = recs.findIndex(r=>r.id===targetId);
+        if (idx===-1) return {ok:false,msg:'Account not found.'};
+        const rec = recs[idx];
+        const limit = getBalanceLimit(rec.category);
+        if (isDeposit) {
+        const cap = limit - rec.balance;
+        if (amount > cap) return {ok:false,msg:`Deposit declined. Remaining capacity: ${fmt(cap)} PKR.`};
+        rec.balance += amount;
+        } else {
+        if (rec.balance < amount) return {ok:false,msg:`Insufficient funds. Available balance: ${fmt(rec.balance)} PKR.`};
+        rec.balance -= amount;
+        }
+        DB.set(key, recs);
+        return {ok:true};
+        }
+        function fmt(n) { return Number(n).toLocaleString('en-PK'); }
+        function handleFraud(userId, cardNumber) {
+        const fc = DB.get('freeze_cards');
+        if (!fc.find(r=>r.cardNumber===cardNumber)) { fc.push({cardNumber,userId}); DB.set('freeze_cards',fc); }
+        if (!isAccountSuspicious(userId)) {
+        const susp = DB.get('suspicious');
+        const acc = [...DB.get('users'),...DB.get('companies')].find(r=>r.id===userId);
+        susp.push({id:userId,name:acc?acc.name:'Unknown',cnic:acc?(acc.cnic||acc.taxNumber||''):'',reason:'Fraud — 3 incorrect PIN attempts'});
+        DB.set('suspicious',susp);
+        }
+        }
+
+
+        // login session handling
+
+        let session = null;
+
+        function setSession(data) {
+        session = data;
+        const badge = document.getElementById('sessionBadge');
+        const btn = document.getElementById('logoutBtn');
+        if (data) {
+        badge.textContent = `${data.name}  ·  ${data.role}`;
+        badge.classList.add('active');
+        btn.style.display = '';
+        } else {
+        badge.classList.remove('active');
+        btn.style.display = 'none';
+        }
+        }
+        function logout() { session = null; setSession(null); renderMain(); }
+
+
+        // main render function
+
+        function setCard({eyebrow, title, subtitle}) {
+        document.getElementById('cardEyebrow').textContent  = eyebrow  || '';
+        document.getElementById('cardTitle').textContent    = title    || '';
+        document.getElementById('cardSubtitle').textContent = subtitle || '';
+        }
+        function setBody(html) { document.getElementById('cardBody').innerHTML = html; }
+
+        function al(type, msg) {
+        return `<div class="alert alert-${type}"><div class="alert-dot"></div><div>${msg}</div></div>`;
+        }
+        function badgeCat(cat) {
+        return `<span class="badge badge-${cat.toLowerCase()}">${cat}</span>`;
+        }
+
+        function navItem(iconName, label, desc, onclick) {
+        return `<div class="nav-item" onclick="${onclick}">
+        <div class="nav-icon">${IC[iconName]||''}</div>
+        <div class="nav-text">
+        <div class="nav-label">${label}</div>
+        <div class="nav-desc">${desc}</div>
+        </div>
+        <div class="nav-arrow">›</div>
+        </div>`;
+        }
+
+
+        // home screen
+
+        function renderMain() {
+        setCard({eyebrow:'Access Portal', title:'Banking Management System', subtitle:'Identify your account type to proceed'});
+        setBody(`
+        <div class="nav-list">
+        ${navItem('user','User Client','Personal banking — deposits, withdrawals, transfers','renderUserClientMenu()')}
+        ${navItem('building','Company Client','Business banking — operations &amp; loan management','renderCompanyClientMenu()')}
+        ${navItem('shield','Banking Employee','Administrative panel — account oversight','renderAdminLogin()')}
+        </div>
+        `);
+        }
+
+        function renderUserClientMenu() {
+        setCard({eyebrow:'User Client', title:'Personal Banking', subtitle:'Create a new account or access an existing one'});
+        setBody(`
+        <div class="nav-list">
+        ${navItem('plus','Open New Account','Submit a registration application','renderRegisterUser()')}
+        ${navItem('login','Access Existing Account','Sign in with your credentials','renderLoginUser()')}
+        </div>
+        <div class="divider"></div>
+        <button class="btn btn-secondary" onclick="renderMain()">Back to Main Menu</button>
+        `);
+        }
+
+        function renderCompanyClientMenu() {
+        setCard({eyebrow:'Company Client', title:'Business Banking', subtitle:'Register your company or sign in'});
+        setBody(`
+        <div class="nav-list">
+        ${navItem('plus','Register Company','Submit a company account application','renderRegisterCompany()')}
+        ${navItem('login','Access Company Account','Sign in with employee ID and company credentials','renderLoginCompany()')}
+        </div>
+        <div class="divider"></div>
+        <button class="btn btn-secondary" onclick="renderMain()">Back to Main Menu</button>
+        `);
+        }
+
+
+        // user registration
+
+        function renderRegisterUser() {
+        setCard({eyebrow:'User Client', title:'Open New Account', subtitle:'All fields are required. Account pending admin approval.'});
+        setBody(`
+        <div class="tier-table">
+        <div class="tier-table-head">Account Tiers &amp; Limits</div>
+        <div class="tier-row"><span>${badgeCat('Bronze')}</span><span class="t-limit">Balance ≤ 100,000,000 &nbsp;·&nbsp; Daily ≤ 100,000 PKR</span></div>
+        <div class="tier-row"><span>${badgeCat('Gold')}</span><span class="t-limit">Balance ≤ 1,000,000,000 &nbsp;·&nbsp; Daily ≤ 500,000 PKR</span></div>
+        </div>
+        <div id="regMsg"></div>
+        <div class="form-group">
+        <label>Account Category</label>
+        <select id="reg_cat" onchange="updateLimitHint()">
+        <option value="Bronze">Bronze</option>
+        <option value="Gold">Gold</option>
+        </select>
+        </div>
+        <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg_name" placeholder="e.g. Ali Khan">
+        </div>
+        <div class="form-group">
+        <label>Address</label>
+        <input type="text" id="reg_addr" placeholder="City, Province">
+        </div>
+        <div class="form-group">
+        <label>CNIC (13 digits, no dashes)</label>
+        <input type="text" id="reg_cnic" placeholder="3520112345678" maxlength="13">
+        </div>
+        <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="reg_user" placeholder="Choose a unique username">
+        </div>
+        <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg_pass" placeholder="Choose a password">
+        </div>
+        <div class="form-group">
+        <label>Daily Withdrawal Limit (PKR)</label>
+        <input type="number" id="reg_limit" placeholder="e.g. 50,000">
+        <div style="font-size:11px;color:var(--text-muted);margin-top:5px" id="limitHint">Bronze maximum: 100,000 PKR</div>
+        </div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitRegisterUser()">Submit Application</button>
+        <button class="btn btn-secondary" onclick="renderUserClientMenu()">Cancel</button>
+        </div>
+        `);
+        }
+        function updateLimitHint() {
+        const v = document.getElementById('reg_cat').value;
+        document.getElementById('limitHint').textContent = v==='Gold' ? 'Gold maximum: 500,000 PKR' : 'Bronze maximum: 100,000 PKR';
+        }
+        function submitRegisterUser() {
+        const cat=document.getElementById('reg_cat').value, name=document.getElementById('reg_name').value.trim(),
+        addr=document.getElementById('reg_addr').value.trim(), cnic=document.getElementById('reg_cnic').value.trim(),
+        user=document.getElementById('reg_user').value.trim(), pass=document.getElementById('reg_pass').value.trim(),
+        limit=parseFloat(document.getElementById('reg_limit').value), maxLimit=cat==='Gold'?500000:100000,
+        msgEl=document.getElementById('regMsg');
+        if (!name||!addr||!cnic||!user||!pass) { msgEl.innerHTML=al('error','All fields are required.'); return; }
+        if (!/^\d{13}$/.test(cnic)) { msgEl.innerHTML=al('error','CNIC must be exactly 13 digits.'); return; }
+        if (isUsernameTaken(user)) { msgEl.innerHTML=al('error',`Username "${user}" is already taken.`); return; }
+        if (!limit||limit<=0||limit>maxLimit) { msgEl.innerHTML=al('error',`Daily limit must be between 1 and ${fmt(maxLimit)} PKR.`); return; }
+        const id=genId();
+        const pending=DB.get('pending_users');
+        pending.push({id,name,address:addr,cnic,username:user,password:pass,balance:0,category:cat});
+        DB.set('pending_users',pending);
+        msgEl.innerHTML=al('success',`Application submitted. Your reference ID is <strong>${id}</strong>. Await admin approval.`);
+        setTimeout(()=>renderUserClientMenu(),3000);
+        }
+
+
+        // company registration
+
+        function renderRegisterCompany() {
+        setCard({eyebrow:'Company Client', title:'Register Company', subtitle:'All fields are required. Pending admin approval.'});
+        setBody(`
+        <div class="tier-table">
+        <div class="tier-table-head">Account Tiers &amp; Limits</div>
+        <div class="tier-row"><span>${badgeCat('Bronze')}</span><span class="t-limit">Balance ≤ 100,000,000 &nbsp;·&nbsp; Daily ≤ 100,000 PKR</span></div>
+        <div class="tier-row"><span>${badgeCat('Gold')}</span><span class="t-limit">Balance ≤ 1,000,000,000 &nbsp;·&nbsp; Daily ≤ 500,000 PKR</span></div>
+        <div class="tier-row"><span>${badgeCat('Business')}</span><span class="t-limit">Balance ≤ 100,000,000,000 &nbsp;·&nbsp; Daily ≤ 20,000,000 PKR</span></div>
+        </div>
+        <div id="regMsg"></div>
+        <div class="form-group">
+        <label>Account Category</label>
+        <select id="reg_cat" onchange="updateCompLimitHint()">
+        <option value="Bronze">Bronze</option>
+        <option value="Gold">Gold</option>
+        <option value="Business">Business</option>
+        </select>
+        </div>
+        <div class="form-group"><label>Company Name</label><input type="text" id="reg_name" placeholder="e.g. Tech Solutions Ltd"></div>
+        <div class="form-group"><label>Address</label><input type="text" id="reg_addr" placeholder="City, Province"></div>
+        <div class="form-group">
+        <label>Tax Number (5 digits)</label>
+        <input type="text" id="reg_tax" placeholder="12345" maxlength="5">
+        </div>
+        <div class="form-group"><label>Username</label><input type="text" id="reg_user" placeholder="Company login username"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="reg_pass" placeholder="Company password"></div>
+        <div class="form-group">
+        <label>Daily Withdrawal Limit (PKR)</label>
+        <input type="number" id="reg_limit" placeholder="e.g. 5,000,000">
+        <div style="font-size:11px;color:var(--text-muted);margin-top:5px" id="compLimitHint">Bronze maximum: 100,000 PKR</div>
+        </div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitRegisterCompany()">Submit Application</button>
+        <button class="btn btn-secondary" onclick="renderCompanyClientMenu()">Cancel</button>
+        </div>
+        `);
+        }
+        function updateCompLimitHint() {
+        const v=document.getElementById('reg_cat').value;
+        document.getElementById('compLimitHint').textContent=v==='Business'?'Business maximum: 20,000,000 PKR':v==='Gold'?'Gold maximum: 500,000 PKR':'Bronze maximum: 100,000 PKR';
+        }
+        function submitRegisterCompany() {
+        const cat=document.getElementById('reg_cat').value, name=document.getElementById('reg_name').value.trim(),
+        addr=document.getElementById('reg_addr').value.trim(), tax=document.getElementById('reg_tax').value.trim(),
+        user=document.getElementById('reg_user').value.trim(), pass=document.getElementById('reg_pass').value.trim(),
+        limit=parseFloat(document.getElementById('reg_limit').value),
+        maxLimit=cat==='Business'?20000000:cat==='Gold'?500000:100000, msgEl=document.getElementById('regMsg');
+        if (!name||!addr||!tax||!user||!pass) { msgEl.innerHTML=al('error','All fields are required.'); return; }
+        if (!/^\d{5}$/.test(tax)) { msgEl.innerHTML=al('error','Tax number must be exactly 5 digits.'); return; }
+        if (isUsernameTaken(user)) { msgEl.innerHTML=al('error',`Username "${user}" is already taken.`); return; }
+        if (!limit||limit<=0||limit>maxLimit) { msgEl.innerHTML=al('error',`Daily limit must be between 1 and ${fmt(maxLimit)} PKR.`); return; }
+        const id=genId();
+        const pending=DB.get('pending_companies');
+        pending.push({id,name,address:addr,taxNumber:tax,username:user,password:pass,balance:0,category:cat});
+        DB.set('pending_companies',pending);
+        msgEl.innerHTML=al('success',`Application submitted. Company reference ID: <strong>${id}</strong>. Await admin approval.`);
+        setTimeout(()=>renderCompanyClientMenu(),3000);
+        }
+
+
+        // login screens
+
+        function renderLoginUser() {
+        setCard({eyebrow:'User Client', title:'Sign In', subtitle:'Enter your username and password'});
+        setBody(`
+        <div id="loginMsg"></div>
+        <div class="form-group"><label>Username</label><input type="text" id="l_user" placeholder="Your username"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="l_pass" placeholder="Your password" onkeydown="if(event.key==='Enter')submitLoginUser()"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitLoginUser()">Sign In</button>
+        <button class="btn btn-secondary" onclick="renderUserClientMenu()">Cancel</button>
+        </div>
+        `);
+        }
+        function submitLoginUser() {
+        const u=document.getElementById('l_user').value.trim(), p=document.getElementById('l_pass').value.trim();
+        const acc=DB.get('users').find(r=>r.username===u&&r.password===p);
+        const msgEl=document.getElementById('loginMsg');
+        if (!acc) { msgEl.innerHTML=al('error','Invalid username or password.'); return; }
+        if (isAccountFrozen(acc.id)) { msgEl.innerHTML=al('error','This account is frozen. Please contact the bank.'); return; }
+        setSession({role:'User',id:acc.id,name:acc.name,category:acc.category,fileKey:'users'});
+        renderUserDashboard();
+        }
+
+        function renderLoginCompany() {
+        setCard({eyebrow:'Company Client', title:'Company Sign In', subtitle:'Provide your Employee ID and company credentials'});
+        setBody(`
+        <div class="hint-box">Company employees must enter their assigned Employee ID, followed by the company username and password.</div>
+        <div id="loginMsg"></div>
+        <div class="form-group"><label>Employee ID</label><input type="text" id="l_eid" placeholder="Your employee ID"></div>
+        <div class="form-group"><label>Company Username</label><input type="text" id="l_user" placeholder="Company username"></div>
+        <div class="form-group"><label>Company Password</label><input type="password" id="l_pass" placeholder="Company password"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitLoginCompany()">Sign In</button>
+        <button class="btn btn-secondary" onclick="renderCompanyClientMenu()">Cancel</button>
+        </div>
+        `);
+        }
+        function submitLoginCompany() {
+        const eid=document.getElementById('l_eid').value.trim(),
+        u=document.getElementById('l_user').value.trim(), p=document.getElementById('l_pass').value.trim(),
+        msgEl=document.getElementById('loginMsg');
+        const employees=DB.get('employees');
+        const emp=employees.find(r=>r.empId===eid);
+        const companies=DB.get('companies');
+        let acc;
+        if (!emp) {
+        acc=companies.find(r=>r.username===u&&r.password===p);
+        } else {
+        acc=companies.find(r=>r.id===emp.companyId&&r.username===u&&r.password===p);
+        }
+        if (!acc) { msgEl.innerHTML=al('error','Employee ID not found or invalid credentials.'); return; }
+        if (isAccountFrozen(acc.id)) { msgEl.innerHTML=al('error','This company account is frozen. Contact the bank.'); return; }
+        setSession({role:'Company',id:acc.id,name:acc.name,category:acc.category,fileKey:'companies'});
+        renderCompanyDashboard();
+        }
+
+
+        // user dashboard
+
+        function renderUserDashboard(msg) {
+        const acc=DB.get('users').find(r=>r.id===session.id);
+        if (!acc) { logout(); return; }
+        setCard({eyebrow:'User Dashboard', title:acc.name, subtitle:`Account No. ${acc.id}`});
+        setBody(`
+        ${msg?al('success',msg):''}
+        ${isAccountSuspicious(acc.id)?al('warning','Your account has been flagged as suspicious. Withdrawal is restricted.'):''}
+        <div class="balance-block">
+        <div>
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount">${fmt(acc.balance)}<span class="bal-currency">PKR</span></div>
+        <div class="bal-meta">${badgeCat(acc.category)} &nbsp; Daily limit: ${fmt(getDailyLimit(acc.category))} PKR</div>
+        </div>
+        </div>
+        <div class="nav-list">
+        ${navItem('deposit','Deposit Funds','Add money to your account','renderDeposit()')}
+        ${navItem('withdraw','Withdraw Funds','Requires card PIN verification','renderWithdraw()')}
+        ${navItem('transfer','Transfer Funds','Send money to another account','renderTransfer()')}
+        ${navItem('history','Transaction History','View your complete transaction record','renderTransactionHistory(session.id)')}
+        </div>
+        `);
+        }
+
+
+        // company dashboard
+
+        function renderCompanyDashboard(msg) {
+        const acc=DB.get('companies').find(r=>r.id===session.id);
+        if (!acc) { logout(); return; }
+        setCard({eyebrow:'Company Dashboard', title:acc.name, subtitle:`Company Account No. ${acc.id}`});
+        setBody(`
+        ${msg?al('success',msg):''}
+        ${isAccountSuspicious(acc.id)?al('warning','This account has been flagged as suspicious. Withdrawal is restricted.'):''}
+        <div class="balance-block">
+        <div>
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount">${fmt(acc.balance)}<span class="bal-currency">PKR</span></div>
+        <div class="bal-meta">${badgeCat(acc.category)} &nbsp; Daily limit: ${fmt(getDailyLimit(acc.category))} PKR</div>
+        </div>
+        </div>
+        <div class="nav-list">
+        ${navItem('deposit','Deposit Funds','Add money to company account','renderDeposit()')}
+        ${navItem('withdraw','Withdraw Funds','Requires card PIN verification','renderWithdraw()')}
+        ${navItem('transfer','Transfer Funds','Send to users or other companies','renderTransfer()')}
+        ${navItem('history','Transaction History','View company transaction record','renderTransactionHistory(session.id)')}
+        ${navItem('loan','Loan Request','Apply for a business credit facility','renderLoanRequest()')}
+        </div>
+        `);
+        }
+
+        function backToDashboard(msg) {
+        if (session.role==='User') renderUserDashboard(msg);
+        else renderCompanyDashboard(msg);
+        }
+
+
+        // deposit flow
+
+        function renderDeposit() {
+        const fk=session.role==='Company'?'companies':'users';
+        const acc=DB.get(fk).find(r=>r.id===session.id);
+        const cap=getBalanceLimit(acc.category)-acc.balance;
+        setCard({eyebrow:'Deposit', title:'Deposit Funds', subtitle:`Remaining capacity: ${fmt(cap)} PKR`});
+        setBody(`
+        <div id="depMsg"></div>
+        <div class="balance-block">
+        <div>
+        <div class="bal-label">Current Balance</div>
+        <div class="bal-amount">${fmt(acc.balance)}<span class="bal-currency">PKR</span></div>
+        </div>
+        </div>
+        <div class="form-group">
+        <label>Deposit Amount (PKR)</label>
+        <input type="number" id="dep_amt" placeholder="Enter amount" min="1" onkeydown="if(event.key==='Enter')submitDeposit()">
+        </div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitDeposit()">Confirm Deposit</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Cancel</button>
+        </div>
+        `);
+        }
+        function submitDeposit() {
+        const amt=parseFloat(document.getElementById('dep_amt').value);
+        const msgEl=document.getElementById('depMsg');
+        if (!amt||amt<=0) { msgEl.innerHTML=al('error','Please enter a valid amount.'); return; }
+        const fk=session.role==='Company'?'companies':'users';
+        const res=modifyBalance(fk,session.id,amt,true);
+        if (!res.ok) { msgEl.innerHTML=al('error',res.msg); return; }
+        logTx(session.id,amt,'Deposit');
+        backToDashboard(`Deposit of ${fmt(amt)} PKR completed successfully.`);
+        }
+
+
+        // withdraw flow
+
+        function renderWithdraw() {
+        if (isAccountSuspicious(session.id)) {
+        setCard({eyebrow:'Withdrawal', title:'Withdrawal Restricted', subtitle:'Account flagged as suspicious'});
+        setBody(`${al('warning','Withdrawals are blocked on this account due to suspicious activity. Contact your branch.')}
+        <button class="btn btn-secondary" onclick="backToDashboard()">Back to Dashboard</button>`);
+        return;
+        }
+        const cards=DB.get('cards').filter(c=>c.userId===session.id&&!isCardFrozen(c.cardNumber));
+        if (cards.length===0) {
+        setCard({eyebrow:'Withdrawal', title:'No Active Card', subtitle:'A debit card is required to withdraw'});
+        setBody(`
+        ${al('info','No active card is linked to your account. You may request a new card below.')}
+        <div id="newCardMsg"></div>
+        <div class="form-group"><label>Set Card PIN (4 digits)</label><input type="password" id="new_pin" placeholder="4-digit PIN" maxlength="4"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="createCard()">Request New Card</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Cancel</button>
+        </div>
+        `);
+        return;
+        }
+        const fk=session.role==='Company'?'companies':'users';
+        const acc=DB.get(fk).find(r=>r.id===session.id);
+        const opts=cards.map((c,i)=>`<option value="${i}">Card ending ****${c.cardNumber.slice(-4)}</option>`).join('');
+        setCard({eyebrow:'Withdrawal', title:'Withdraw Funds', subtitle:'PIN verification required'});
+        setBody(`
+        <div id="wdMsg"></div>
+        <div class="balance-block">
+        <div>
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount">${fmt(acc.balance)}<span class="bal-currency">PKR</span></div>
+        <div class="bal-meta">Daily limit: ${fmt(getDailyLimit(acc.category))} PKR</div>
+        </div>
+        </div>
+        <div class="form-group"><label>Select Card</label><select id="wd_card">${opts}</select></div>
+        <div class="form-group"><label>Amount (PKR)</label><input type="number" id="wd_amt" placeholder="Enter amount" min="1"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="initiateWithdraw()">Proceed to PIN Verification</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Cancel</button>
+        </div>
+        `);
+        }
+        function createCard() {
+        const pin=document.getElementById('new_pin').value.trim(), msgEl=document.getElementById('newCardMsg');
+        if (!/^\d{4}$/.test(pin)) { msgEl.innerHTML=al('error','PIN must be exactly 4 digits.'); return; }
+        const cardNumber=genCard();
+        const cards=DB.get('cards');
+        cards.push({userId:session.id,cardNumber,pin});
+        DB.set('cards',cards);
+        msgEl.innerHTML=al('success',`Card issued. Number: <span class="mono">${cardNumber.match(/.{4}/g).join(' ')}</span>. You may now withdraw.`);
+        setTimeout(()=>renderWithdraw(),2500);
+        }
+        function initiateWithdraw() {
+        const cards=DB.get('cards').filter(c=>c.userId===session.id&&!isCardFrozen(c.cardNumber));
+        const cardIdx=parseInt(document.getElementById('wd_card').value);
+        const amt=parseFloat(document.getElementById('wd_amt').value);
+        const msgEl=document.getElementById('wdMsg');
+        if (!amt||amt<=0) { msgEl.innerHTML=al('error','Please enter a valid amount.'); return; }
+        const fk=session.role==='Company'?'companies':'users';
+        const acc=DB.get(fk).find(r=>r.id===session.id);
+        if (amt>getDailyLimit(acc.category)) { msgEl.innerHTML=al('error',`Amount exceeds daily limit of ${fmt(getDailyLimit(acc.category))} PKR.`); return; }
+        openPinModal(cards[cardIdx],amt);
+        }
+
+        // pin confirmation popup
+        let _pinAttempts=0, _pinCard=null, _pinAmt=0, _pinInput='';
+
+        function openPinModal(card,amt) {
+        _pinCard=card; _pinAmt=amt; _pinAttempts=0; _pinInput='';
+        document.getElementById('pinOverlay').classList.add('open');
+        renderPinModal();
+        }
+        function closePinModal() {
+        document.getElementById('pinOverlay').classList.remove('open');
+        _pinCard=null; _pinAmt=0; _pinAttempts=0; _pinInput='';
+        }
+        function renderPinModal() {
+        const remaining=3-_pinAttempts;
+        document.getElementById('pinModalBody').innerHTML=`
+        <div style="text-align:center;margin-bottom:4px;color:var(--text-sub);font-size:13px;">
+        Card ending <span class="mono">****${_pinCard.cardNumber.slice(-4)}</span>
+        </div>
+        <div style="text-align:center;margin-bottom:12px;font-size:13px;color:var(--text-muted);">
+        Amount: <strong style="color:var(--text);font-family:'JetBrains Mono',monospace">${fmt(_pinAmt)} PKR</strong>
+        </div>
+        <div class="pin-dots" id="pinDots">
+        ${[0,1,2,3].map(i=>`<div class="pin-dot ${i<_pinInput.length?'filled':''}" id="dot${i}"></div>`).join('')}
+        </div>
+        <div class="attempts-text">${remaining} attempt${remaining===1?'':'s'} remaining</div>
+        <div class="pin-grid">
+        ${[1,2,3,4,5,6,7,8,9].map(k=>`<button class="pin-key" onclick="pinKey('${k}')">${k}</button>`).join('')}
+        <button class="pin-key key-empty"></button>
+        <button class="pin-key" onclick="pinKey('0')">0</button>
+        <button class="pin-key key-del" onclick="pinKey('DEL')">Del</button>
+        </div>
+        <div id="pinMsg" style="margin-top:14px;"></div>
+        `;
+        }
+        function pinKey(k) {
+        if (k==='DEL') { _pinInput=_pinInput.slice(0,-1); }
+        else if (_pinInput.length<4) { _pinInput+=k; }
+        [0,1,2,3].forEach(i=>{ const el=document.getElementById(`dot${i}`); if(el) el.classList.toggle('filled',i<_pinInput.length); });
+        if (_pinInput.length===4) {
+        setTimeout(()=>{
+        if (_pinInput===_pinCard.pin) {
+        const amt=_pinAmt, card=_pinCard;
+        closePinModal();
+        doWithdraw(amt,card);
+        } else {
+        _pinAttempts++;
+        _pinInput='';
+        if (_pinAttempts>=3) {
+        const fraudCard=_pinCard;
+        closePinModal();
+        handleFraud(session.id,fraudCard.cardNumber);
+        setCard({eyebrow:'Security Alert', title:'Access Denied', subtitle:'Fraudulent activity detected'});
+        setBody(`${al('error','Three consecutive incorrect PIN attempts have been recorded. Your card has been suspended and account flagged for review.')}
+        <button class="btn btn-secondary" onclick="backToDashboard()">Return to Dashboard</button>`);
+        } else {
+        document.getElementById('pinMsg').innerHTML=al('error',`Incorrect PIN. ${3-_pinAttempts} attempt${3-_pinAttempts===1?'':'s'} remaining.`);
+        renderPinModal();
+        }
+        }
+        },100);
+        }
+        }
+        function doWithdraw(amt,card) {
+        const fk=session.role==='Company'?'companies':'users';
+        const res=modifyBalance(fk,session.id,amt,false);
+        if (res.ok) {
+        logTx(session.id,amt,'Withdraw');
+        backToDashboard(`Withdrawal of ${fmt(amt)} PKR completed successfully.`);
+        } else {
+        backToDashboard();
+        document.getElementById('cardBody').insertAdjacentHTML('afterbegin',al('error',res.msg));
+        }
+        }
+
+        // transfer flow
+
+        function renderTransfer() {
+        setCard({eyebrow:'Transfer', title:'Transfer Funds', subtitle:'Send money to a user or company account'});
+        setBody(`
+        <div id="trMsg"></div>
+        <div class="form-group">
+        <label>Recipient Type</label>
+        <select id="tr_type" onchange="toggleTransferFields()">
+        <option value="user">User Client</option>
+        <option value="company">Company Client</option>
+        </select>
+        </div>
+        <div id="tr_fields_user">
+        <div class="form-group"><label>Recipient Full Name</label><input type="text" id="tr_name" placeholder="Exact full name as registered"></div>
+        <div class="form-group"><label>Recipient CNIC (13 digits)</label><input type="text" id="tr_cnic" placeholder="3520112345678"></div>
+        </div>
+        <div id="tr_fields_company" style="display:none">
+        <div class="form-group"><label>Company Name</label><input type="text" id="tr_cname" placeholder="Exact company name"></div>
+        <div class="form-group"><label>Tax Number (5 digits)</label><input type="text" id="tr_tax" placeholder="12345"></div>
+        </div>
+        <div class="form-group"><label>Amount (PKR)</label><input type="number" id="tr_amt" placeholder="Enter amount" min="1"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitTransfer()">Confirm Transfer</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Cancel</button>
+        </div>
+        `);
+        }
+        function toggleTransferFields() {
+        const v=document.getElementById('tr_type').value;
+        document.getElementById('tr_fields_user').style.display=v==='user'?'':'none';
+        document.getElementById('tr_fields_company').style.display=v==='company'?'':'none';
+        }
+        function submitTransfer() {
+        const type=document.getElementById('tr_type').value, amt=parseFloat(document.getElementById('tr_amt').value), msgEl=document.getElementById('trMsg');
+        if (!amt||amt<=0) { msgEl.innerHTML=al('error','Please enter a valid amount.'); return; }
+        let targetId=null;
+        if (type==='user') {
+        const name=document.getElementById('tr_name').value.trim(), cnic=document.getElementById('tr_cnic').value.trim();
+        const rec=DB.get('users').find(r=>r.name.toLowerCase()===name.toLowerCase()&&r.cnic===cnic);
+        if (rec) targetId=rec.id;
+        } else {
+        const cname=document.getElementById('tr_cname').value.trim(), tax=document.getElementById('tr_tax').value.trim();
+        const rec=DB.get('companies').find(r=>r.name.toLowerCase()===cname.toLowerCase()&&r.taxNumber===tax);
+        if (rec) targetId=rec.id;
+        }
+        if (!targetId) { msgEl.innerHTML=al('error','Recipient not found. Please verify the name and identification details.'); return; }
+        if (targetId===session.id) { msgEl.innerHTML=al('error','You cannot transfer funds to your own account.'); return; }
+        const srcKey=session.role==='Company'?'companies':'users';
+        const res=modifyBalance(srcKey,session.id,amt,false);
+        if (!res.ok) { msgEl.innerHTML=al('error',res.msg); return; }
+        modifyBalance(type==='company'?'companies':'users',targetId,amt,true);
+        logTx(session.id,amt,'Transfer',targetId);
+        backToDashboard(`Transfer of ${fmt(amt)} PKR to account #${targetId} completed.`);
+        }
+
+        // transaction history view
+
+        function renderTransactionHistory(uid) {
+        const txs=DB.get('transactions').filter(t=>t.id===uid||t.targetId===uid);
+        setCard({eyebrow:'Transaction History', title:'Account Statement', subtitle:`Account No. ${uid}`});
+        if (txs.length===0) {
+        setBody(`
+        <div class="empty-state">
+        <div class="es-icon">${IC.history}</div>
+        <div class="es-title">No transactions found</div>
+        <div class="es-text">Your transaction history will appear here.</div>
+        </div>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Back to Dashboard</button>
+        `); return;
+        }
+        const rows=txs.slice().reverse().map(t=>{
+        const isOut=t.id===uid;
+        const label=!isOut?`Received (from #${t.id})`:t.targetId?`${t.type} to #${t.targetId}`:t.type;
+        const isCr=t.type==='Deposit'||t.type==='Loan Deposit'||!isOut;
+        const sign=isCr?'+':'−';
+        const cls=isCr?'tx-credit':'tx-debit';
+        return `<tr>
+        <td class="mono" style="font-size:12px;color:var(--text-muted)">${t.date}</td>
+        <td style="color:var(--text-sub);font-size:13px">${label}</td>
+        <td class="mono ${cls}" style="text-align:right;font-size:13px">${sign}${fmt(t.amount)}</td>
+        </tr>`;
+        }).join('');
+        setBody(`
+        <div style="overflow-x:auto">
+        <table class="data-table">
+        <thead><tr><th>Date</th><th>Description</th><th style="text-align:right">Amount (PKR)</th></tr></thead>
+        <tbody>${rows}</tbody>
+        </table>
+        </div>
+        <div class="divider"></div>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Back to Dashboard</button>
+        `);
+        }
+
+
+        // loan request flow
+
+        function renderLoanRequest() {
+        const acc=DB.get('companies').find(r=>r.id===session.id);
+        setCard({eyebrow:'Loan Request', title:'Apply for Credit Facility', subtitle:'Loan subject to admin approval'});
+        setBody(`
+        <div id="loanMsg"></div>
+        <div class="balance-block">
+        <div>
+        <div class="bal-label">Current Balance</div>
+        <div class="bal-amount">${fmt(acc.balance)}<span class="bal-currency">PKR</span></div>
+        <div class="bal-meta">${badgeCat(acc.category)}</div>
+        </div>
+        </div>
+        <div class="form-group"><label>Requested Loan Amount (PKR)</label><input type="number" id="loan_amt" placeholder="Enter loan amount" min="1"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitLoan()">Submit Loan Request</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">Cancel</button>
+        </div>
+        `);
+        }
+        function submitLoan() {
+        const amt=parseFloat(document.getElementById('loan_amt').value), msgEl=document.getElementById('loanMsg');
+        if (!amt||amt<=0) { msgEl.innerHTML=al('error','Please enter a valid loan amount.'); return; }
+        const acc=DB.get('companies').find(r=>r.id===session.id);
+        const loans=DB.get('loans'); loans.push({companyId:session.id,companyName:acc.name,amount:amt}); DB.set('loans',loans);
+        renderCompanyDashboard(`Loan request for ${fmt(amt)} PKR submitted. Pending admin approval.`);
+        }
+
+        // admin login
+
+        function renderAdminLogin() {
+        setCard({eyebrow:'Banking Employee', title:'Admin Sign In', subtitle:'Restricted access — authorised personnel only'});
+        setBody(`
+        <div id="adminLoginMsg"></div>
+        <div class="form-group"><label>Admin Username</label><input type="text" id="a_user" placeholder="admin"></div>
+        <div class="form-group"><label>Admin Password</label><input type="password" id="a_pass" placeholder="" onkeydown="if(event.key==='Enter')submitAdminLogin()"></div>
+        <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitAdminLogin()">Sign In</button>
+        <button class="btn btn-secondary" onclick="renderMain()">Cancel</button>
+        </div>
+        `);
+        }
+        function submitAdminLogin() {
+        const u=document.getElementById('a_user').value.trim(), p=document.getElementById('a_pass').value.trim();
+        const found=DB.get('admin').find(a=>a.username===u&&a.password===p);
+        if (!found) { document.getElementById('adminLoginMsg').innerHTML=al('error','Invalid admin credentials.'); return; }
+        setSession({role:'Admin',id:'admin',name:u});
+        renderAdminPanel();
+        }
+
+
+        // admin panel home
+
+        function renderAdminPanel(msg) {
+        setCard({eyebrow:'Admin Panel', title:'Administration', subtitle:'Account management and oversight'});
+        setBody(`
+        ${msg?al('success',msg):''}
+        <div class="nav-list">
+        ${navItem('list','View All Accounts','Active users and companies','renderAdminAccounts()')}
+        ${navItem('bell','New Account Requests','Pending user and company applications','renderAdminRequests()')}
+        ${navItem('loan','Loan Requests','Pending company loan applications','renderAdminLoans()')}
+        ${navItem('chart','Transaction History','View any account statement','renderAdminTransactionHistory()')}
+        ${navItem('freeze','Freeze Account','Suspend suspicious accounts','renderAdminFreeze()')}
+        ${navItem('fire','Unfreeze Account / Card','Restore suspended accounts or cards','renderAdminUnfreeze()')}
+        ${navItem('trash','Remove Account / Card','Permanently remove flagged accounts','renderAdminRemove()')}
+        </div>
+        `);
+        }
+
+        // view all accounts
+        function renderAdminAccounts() {
+        const users=DB.get('users'), companies=DB.get('companies');
+        setCard({eyebrow:'Admin', title:'All Accounts', subtitle:`${users.length} users · ${companies.length} companies`});
+        const uRows=users.length?users.map(u=>`<tr>
+        <td class="mono">${u.id}</td><td>${u.name}</td>
+        <td class="mono" style="font-size:11px">${u.cnic}</td>
+        <td class="mono" style="text-align:right">${fmt(u.balance)}</td>
+        <td>${badgeCat(u.category)}</td>
+        <td>${isAccountFrozen(u.id)?'<span class="badge badge-frozen">Frozen</span>':isAccountSuspicious(u.id)?'<span class="badge badge-suspicious">Suspicious</span>':''}</td>
+        </tr>`).join(''):`<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">No users found</td></tr>`;
+        const cRows=companies.length?companies.map(c=>`<tr>
+        <td class="mono">${c.id}</td><td>${c.name}</td>
+        <td class="mono" style="font-size:11px">${c.taxNumber}</td>
+        <td class="mono" style="text-align:right">${fmt(c.balance)}</td>
+        <td>${badgeCat(c.category)}</td>
+        <td>${isAccountFrozen(c.id)?'<span class="badge badge-frozen">Frozen</span>':isAccountSuspicious(c.id)?'<span class="badge badge-suspicious">Suspicious</span>':''}</td>
+        </tr>`).join(''):`<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">No companies found</td></tr>`;
+        setBody(`
+        <div class="section-label">Users</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>CNIC</th><th style="text-align:right">Balance (PKR)</th><th>Tier</th><th>Status</th></tr></thead><tbody>${uRows}</tbody></table></div>
+        <div class="section-label">Companies</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Tax No.</th><th style="text-align:right">Balance (PKR)</th><th>Tier</th><th>Status</th></tr></thead><tbody>${cRows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+
+        // pending user/company requests
+        function renderAdminRequests() {
+        const pu=DB.get('pending_users'), pc=DB.get('pending_companies');
+        setCard({eyebrow:'Admin', title:'Account Requests', subtitle:`${pu.length} user · ${pc.length} company pending`});
+        const uRows=pu.length?pu.map((u,i)=>`<tr>
+        <td class="mono">${u.id}</td><td>${u.name}</td>
+        <td class="mono" style="font-size:11px">${u.cnic}</td><td>${badgeCat(u.category)}</td>
+        <td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="approveRequest('user',${i})">Approve</button><button class="btn btn-danger btn-sm" onclick="rejectRequest('user',${i})">Reject</button></div></td>
+        </tr>`).join(''):`<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px">No pending user requests</td></tr>`;
+        const cRows=pc.length?pc.map((c,i)=>`<tr>
+        <td class="mono">${c.id}</td><td>${c.name}</td>
+        <td class="mono">${c.taxNumber}</td><td>${badgeCat(c.category)}</td>
+        <td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="approveRequest('company',${i})">Approve</button><button class="btn btn-danger btn-sm" onclick="rejectRequest('company',${i})">Reject</button></div></td>
+        </tr>`).join(''):`<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px">No pending company requests</td></tr>`;
+        setBody(`
+        <div class="section-label">User Applications</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>CNIC</th><th>Tier</th><th>Action</th></tr></thead><tbody>${uRows}</tbody></table></div>
+        <div class="section-label">Company Applications</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Tax No.</th><th>Tier</th><th>Action</th></tr></thead><tbody>${cRows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function approveRequest(type,idx) {
+        const pk=type==='user'?'pending_users':'pending_companies';
+        const pending=DB.get(pk), rec=pending[idx];
+        openConfirm(`Approve — ${rec.name}`,
+        `<p style="font-size:13px;color:var(--text-sub);margin-bottom:14px">Assign a card to this account by setting a 4-digit PIN.</p>
+        <div class="form-group"><label>Card PIN (4 digits)</label><input type="password" id="approve_pin" maxlength="4" placeholder="e.g. 1234"></div>
+        <div id="approvePinMsg"></div>`,
+        ()=>{
+        const pin=document.getElementById('approve_pin').value.trim();
+        if (!/^\d{4}$/.test(pin)) { document.getElementById('approvePinMsg').innerHTML=al('error','PIN must be 4 digits.'); return false; }
+        const dest=DB.get(type==='user'?'users':'companies'); dest.push(rec); DB.set(type==='user'?'users':'companies',dest);
+        const newCard=genCard(), cards=DB.get('cards');
+        cards.push({userId:rec.id,cardNumber:newCard,pin}); DB.set('cards',cards);
+        const np=pending.filter((_,i)=>i!==idx); DB.set(pk,np);
+        renderAdminPanel(`${rec.name} approved. Card assigned ending ****${newCard.slice(-4)}.`);
+        return true;
+        });
+        }
+        function rejectRequest(type,idx) {
+        const pk=type==='user'?'pending_users':'pending_companies';
+        const p=DB.get(pk); p.splice(idx,1); DB.set(pk,p);
+        renderAdminRequests();
+        }
+
+        // admin loan review
+        function renderAdminLoans() {
+        const loans=DB.get('loans');
+        setCard({eyebrow:'Admin', title:'Loan Requests', subtitle:`${loans.length} pending`});
+        if (!loans.length) {
+        setBody(`<div class="empty-state"><div class="es-icon">${IC.loan}</div><div class="es-title">No loan requests</div><div class="es-text">There are no pending loan applications at this time.</div></div><button class="btn btn-secondary" onclick="renderAdminPanel()">Back</button>`); return;
+        }
+        const rows=loans.map((l,i)=>`<tr>
+        <td class="mono">${l.companyId}</td><td>${l.companyName}</td>
+        <td class="mono" style="text-align:right">${fmt(l.amount)}</td>
+        <td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="approveLoan(${i})">Approve</button><button class="btn btn-danger btn-sm" onclick="rejectLoan(${i})">Reject</button></div></td>
+        </tr>`).join('');
+        setBody(`
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>Co. ID</th><th>Company</th><th style="text-align:right">Amount (PKR)</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function approveLoan(idx) {
+        const loans=DB.get('loans'), l=loans[idx];
+        modifyBalance('companies',l.companyId,l.amount,true);
+        logTx(l.companyId,l.amount,'Loan Deposit');
+        loans.splice(idx,1); DB.set('loans',loans);
+        renderAdminPanel(`Loan of ${fmt(l.amount)} PKR approved for ${l.companyName}.`);
+        }
+        function rejectLoan(idx) {
+        const loans=DB.get('loans'); loans.splice(idx,1); DB.set('loans',loans);
+        renderAdminLoans();
+        }
+
+        // admin transaction history
+        function renderAdminTransactionHistory() {
+        const users=DB.get('users'), companies=DB.get('companies');
+        const all=[...users.map(u=>({...u,type:'User'})),...companies.map(c=>({...c,type:'Company'}))];
+        setCard({eyebrow:'Admin', title:'Transaction History', subtitle:'Select an account to view its statement'});
+        const rows=all.map(a=>`<tr style="cursor:pointer" onclick="renderAdminTxDetail('${a.id}','${a.name}')">
+        <td class="mono">${a.id}</td><td>${a.name}</td>
+        <td><span style="font-size:11px;color:var(--text-muted)">${a.type}</span></td>
+        <td>${badgeCat(a.category)}</td>
+        </tr>`).join('');
+        setBody(`
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Tier</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function renderAdminTxDetail(uid,name) {
+        const txs=DB.get('transactions').filter(t=>t.id===uid||t.targetId===uid);
+        setCard({eyebrow:'Transaction History', title:name, subtitle:`Account No. ${uid}`});
+        if (!txs.length) {
+        setBody(`<div class="empty-state"><div class="es-icon">${IC.history}</div><div class="es-title">No transactions</div><div class="es-text">This account has no recorded transactions.</div></div>
+        <button class="btn btn-secondary" onclick="renderAdminTransactionHistory()">Back</button>`); return;
+        }
+        const rows=txs.slice().reverse().map(t=>{
+        const isOut=t.id===uid;
+        const label=!isOut?`Received (from #${t.id})`:t.targetId?`${t.type} to #${t.targetId}`:t.type;
+        const isCr=t.type==='Deposit'||t.type==='Loan Deposit'||!isOut;
+        return `<tr>
+        <td class="mono" style="font-size:12px;color:var(--text-muted)">${t.date}</td>
+        <td style="font-size:13px;color:var(--text-sub)">${label}</td>
+        <td class="mono ${isCr?'tx-credit':'tx-debit'}" style="text-align:right;font-size:13px">${isCr?'+':'−'}${fmt(t.amount)}</td>
+        </tr>`;
+        }).join('');
+        setBody(`
+        <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Date</th><th>Description</th><th style="text-align:right">Amount (PKR)</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <div class="divider"></div>
+        <button class="btn btn-secondary" onclick="renderAdminTransactionHistory()">Back</button>
+        `);
+        }
+
+        // freeze account/card
+        function renderAdminFreeze() {
+        const susp=DB.get('suspicious');
+        setCard({eyebrow:'Admin', title:'Freeze Account', subtitle:'Accounts flagged as suspicious'});
+        if (!susp.length) {
+        setBody(`<div class="empty-state"><div class="es-icon">${IC.check}</div><div class="es-title">No suspicious accounts</div><div class="es-text">There are no accounts flagged for review at this time.</div></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back</button>`); return;
+        }
+        const rows=susp.map((s,i)=>`<tr>
+        <td class="mono">${s.id}</td><td>${s.name}</td>
+        <td class="mono" style="font-size:11px">${s.cnic}</td>
+        <td style="font-size:12px;color:var(--amber)">${s.reason}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="freezeAccount(${i})">Freeze</button></td>
+        </tr>`).join('');
+        setBody(`
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>CNIC / Tax</th><th>Reason</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function freezeAccount(idx) {
+        const susp=DB.get('suspicious'), s=susp[idx];
+        const fa=DB.get('freeze_acc');
+        if (!fa.find(r=>r.id===s.id)) { fa.push({id:s.id,name:s.name,cnic:s.cnic,reason:'Frozen by Admin'}); DB.set('freeze_acc',fa); }
+        const cards=DB.get('cards').filter(c=>c.userId===s.id);
+        const fc=DB.get('freeze_cards');
+        cards.forEach(c=>{ if(!fc.find(r=>r.cardNumber===c.cardNumber)) fc.push({cardNumber:c.cardNumber,userId:s.id}); });
+        DB.set('freeze_cards',fc);
+        const ns=susp.filter((_,i)=>i!==idx); DB.set('suspicious',ns);
+        renderAdminPanel(`Account #${s.id} (${s.name}) has been frozen along with all associated cards.`);
+        }
+
+        // unfreeze account/card
+        function renderAdminUnfreeze() {
+        const fa=DB.get('freeze_acc'), fc=DB.get('freeze_cards');
+        setCard({eyebrow:'Admin', title:'Unfreeze', subtitle:'Restore frozen accounts or cards'});
+        const aRows=fa.length?fa.map((f,i)=>`<tr>
+        <td class="mono">${f.id}</td><td>${f.name}</td>
+        <td class="mono" style="font-size:11px">${f.cnic}</td>
+        <td style="font-size:12px;color:var(--text-muted)">${f.reason}</td>
+        <td><button class="btn btn-success btn-sm" onclick="unfreezeAccount(${i})">Unfreeze</button></td>
+        </tr>`).join(''):`<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px">No frozen accounts</td></tr>`;
+        const cRows=fc.length?fc.map((c,i)=>`<tr>
+        <td class="mono">****${c.cardNumber.slice(-4)}</td><td class="mono">${c.userId}</td>
+        <td><button class="btn btn-success btn-sm" onclick="unfreezeCard(${i})">Unfreeze</button></td>
+        </tr>`).join(''):`<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:16px">No frozen cards</td></tr>`;
+        setBody(`
+        <div class="section-label">Frozen Accounts</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>CNIC / Tax</th><th>Reason</th><th>Action</th></tr></thead><tbody>${aRows}</tbody></table></div>
+        <div class="section-label">Frozen Cards</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>Card</th><th>Account ID</th><th>Action</th></tr></thead><tbody>${cRows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function unfreezeAccount(idx) {
+        const fa=DB.get('freeze_acc'), uid=fa[idx].id, name=fa[idx].name;
+        fa.splice(idx,1); DB.set('freeze_acc',fa);
+        DB.set('freeze_cards',DB.get('freeze_cards').filter(r=>r.userId!==uid));
+        renderAdminPanel(`Account #${uid} (${name}) and associated cards have been unfrozen.`);
+        }
+        function unfreezeCard(idx) {
+        const fc=DB.get('freeze_cards'), card=fc[idx];
+        if (isAccountFrozen(card.userId)) {
+        renderAdminUnfreeze();
+        document.getElementById('cardBody').insertAdjacentHTML('afterbegin',al('error',`Cannot unfreeze card — account #${card.userId} is still frozen. Unfreeze the account first.`));
+        return;
+        }
+        fc.splice(idx,1); DB.set('freeze_cards',fc);
+        renderAdminPanel(`Card ****${card.cardNumber.slice(-4)} has been unfrozen.`);
+        }
+
+        // remove account
+        function renderAdminRemove() {
+        const susp=DB.get('suspicious'), frozen=DB.get('freeze_acc'), fc=DB.get('freeze_cards');
+        setCard({eyebrow:'Admin', title:'Remove Account / Card', subtitle:'Permanently remove suspicious or frozen records'});
+        const combined=[...susp.map(s=>({...s,status:'Suspicious'})),...frozen.map(f=>({...f,status:'Frozen'}))];
+        const aRows=combined.length?combined.map(a=>`<tr>
+        <td class="mono">${a.id}</td><td>${a.name}</td>
+        <td><span class="badge badge-${a.status.toLowerCase()}">${a.status}</span></td>
+        <td><button class="btn btn-danger btn-sm" onclick="removeAccount('${a.id}','${a.name}')">Remove</button></td>
+        </tr>`).join(''):`<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px">No accounts available for removal</td></tr>`;
+        const cRows=fc.length?fc.map(c=>`<tr>
+        <td class="mono">****${c.cardNumber.slice(-4)}</td><td class="mono">${c.userId}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="removeCard('${c.cardNumber}')">Remove</button></td>
+        </tr>`).join(''):`<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:16px">No frozen cards</td></tr>`;
+        setBody(`
+        <div class="section-label">Accounts</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Status</th><th>Action</th></tr></thead><tbody>${aRows}</tbody></table></div>
+        <div class="section-label">Frozen Cards</div>
+        <div style="overflow-x:auto;margin-bottom:22px"><table class="data-table"><thead><tr><th>Card</th><th>Account ID</th><th>Action</th></tr></thead><tbody>${cRows}</tbody></table></div>
+        <button class="btn btn-secondary" onclick="renderAdminPanel()">Back to Admin Panel</button>
+        `);
+        }
+        function removeAccount(uid,name) {
+        ['users','companies','freeze_acc','suspicious'].forEach(k=>DB.set(k,DB.get(k).filter(r=>r.id!==uid)));
+        DB.set('cards',DB.get('cards').filter(c=>c.userId!==uid));
+        DB.set('freeze_cards',DB.get('freeze_cards').filter(r=>r.userId!==uid));
+        renderAdminPanel(`Account #${uid} (${name}) and all associated records have been permanently removed.`);
+        }
+        function removeCard(cardNumber) {
+        DB.set('cards',DB.get('cards').filter(c=>c.cardNumber!==cardNumber));
+        DB.set('freeze_cards',DB.get('freeze_cards').filter(r=>r.cardNumber!==cardNumber));
+        renderAdminPanel(`Card ****${cardNumber.slice(-4)} has been permanently removed.`);
+        }
+
+        // confirm popup
+
+        let _confirmCb=null;
+        function openConfirm(title,bodyHtml,onConfirm) {
+        document.getElementById('confirmTitle').textContent=title;
+        document.getElementById('confirmBody').innerHTML=`${bodyHtml}<div class="divider"></div><div class="btn-row"><button class="btn btn-primary" onclick="confirmAction()">Confirm</button><button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button></div>`;
+        _confirmCb=onConfirm;
+        document.getElementById('confirmOverlay').classList.add('open');
+        }
+        function confirmAction() { if(_confirmCb&&_confirmCb()!==false) closeConfirm(); }
+        function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('open'); _confirmCb=null; }
+
+
+        // kick things off
+
+        DB.init();
+        renderMain();
+    </script>
+</body>
+</html>
